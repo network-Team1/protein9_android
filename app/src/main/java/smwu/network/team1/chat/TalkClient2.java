@@ -10,8 +10,8 @@ import java.net.Socket;
 
 public class TalkClient2 {
     public static void main(String[] args) throws Exception {
-        String serverIP = "127.0.0.1";
-        int serverPort = 9999;
+        String serverIP = "172.30.1.88";
+        int serverPort = 9000;
 
         Socket sock = new Socket(serverIP, serverPort);
 

@@ -14,7 +14,7 @@ public class TalkServer2 {
     private static Map<String, PrintWriter> clientWriters = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
-        int serverPort = 9999;
+        int serverPort = 9000;
 
         ServerSocket serverSocket = new ServerSocket(serverPort);
         System.out.println("Talk Server Ready for Chatting");
