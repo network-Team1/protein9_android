@@ -20,10 +20,10 @@ import java.net.Socket;
 public class MainActivity extends AppCompatActivity {
 
     private Handler mHandler;
-    InetAddress serverAddr;
+    //InetAddress serverAddr;
     Socket socket;
     PrintWriter sendWriter;
-    private String ip = "your ip";
+    private String ip = "192.168.35.87";
     private int port = 8545;
 
     TextView textView;
@@ -55,15 +55,15 @@ public class MainActivity extends AppCompatActivity {
         chatView = (TextView) findViewById(R.id.chatView);
         message = (EditText) findViewById(R.id.message);
         //Intent intent = getIntent();
-        UserID = "클라이언트2";
-        textView.setText("클라이언트2<- 랜덤숫자로 고치기");
+        UserID = "클라이언트2"; // 유저 구분 이름
+        textView.setText("chatting App"); //
         chatbutton = (Button) findViewById(R.id.chatbutton);
 
         new Thread() {
             public void run() {
                 try {
                     //InetAddress serverAddr = InetAddress.getByName(ip);
-                    socket = new Socket("172.20.30.53", port);
+                    socket = new Socket(ip, port);
                     sendWriter = new PrintWriter(socket.getOutputStream());
                     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     while(true){
