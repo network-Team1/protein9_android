@@ -3,4 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorAccent">#faf535</color>
+    <color name="choco">#805847</color>
+    <color name="deep_choco">#4D2311</color>
+    <color name="banana">#FFE68D</color>
+    <color name="beige">#F6E4D2</color>
+
 </resources>

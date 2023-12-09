@@ -1,7 +1,5 @@
 package com.example.network;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -10,15 +8,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 
-public class MainActivity extends AppCompatActivity {
-
+public class ChatActivity extends AppCompatActivity {
     private Handler mHandler;
     //InetAddress serverAddr;
     Socket socket;
