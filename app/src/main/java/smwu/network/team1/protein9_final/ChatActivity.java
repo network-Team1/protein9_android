@@ -19,17 +19,14 @@ import java.net.Socket;
 public class ChatActivity extends AppCompatActivity {
 
     private Handler mHandler;
-    //InetAddress serverAddr;
     Socket socket;
     PrintWriter sendWriter;
     BufferedReader receiveReader;
     private String ip = "172.30.1.88";
-//    private String ip = "192.168.35.87";
     private int port = 8888;
 
     TextView textView;
     String UserID;
-    Button connectbutton;
     Button chatbutton;
     TextView chatView;
     EditText message;
@@ -41,7 +38,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onStop();
         try {
             sendWriter.close();
-            receiveReader.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,13 +49,11 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         mHandler = new Handler();
-        textView = (TextView) findViewById(R.id.textView);
-        chatView = (TextView) findViewById(R.id.chatView);
-        message = (EditText) findViewById(R.id.message);
-        chatbutton = (Button) findViewById(R.id.chatbutton);
-        //Intent intent = getIntent();
-//        UserID = "클라이언트2"; // 유저 구분 이름
-        textView.setText("chatting App"); //
+        textView = (TextView) findViewById(R.id.chat_sendTo_tv);
+        chatView = (TextView) findViewById(R.id.chat_textview_tv);
+        message = (EditText) findViewById(R.id.chat_message_et);
+        chatbutton = (Button) findViewById(R.id.chat_chatting_btn);
+        textView.setText("chatting App"); // pt 선생님
 
         new Thread() {
             public void run() {
@@ -89,7 +83,7 @@ public class ChatActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     // 메시지를 표시하는 TextView
-                                    TextView chatView = findViewById(R.id.chatView);
+                                    TextView chatView = findViewById(R.id.chat_textview_tv);
 
                                     chatView.append(read + '\n');
                                     // ID와 메시지 분리
