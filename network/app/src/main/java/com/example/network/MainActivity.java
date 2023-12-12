@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     InetAddress serverAddr;
     Socket socket;
     PrintWriter sendWriter;
-    private String ip = "your ip";
+    private String ip = "172.20.28.79";
     private int port = 8545;
 
     TextView textView;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     //InetAddress serverAddr = InetAddress.getByName(ip);
-                    socket = new Socket("172.20.30.53", port);
+                    socket = new Socket(ip, port);
                     sendWriter = new PrintWriter(socket.getOutputStream());
                     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     while(true){
