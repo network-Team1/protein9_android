@@ -18,16 +18,13 @@ import java.net.Socket;
 
 public class ChatActivity extends AppCompatActivity {
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_chat);
-//    }
-private Handler mHandler;
+    private Handler mHandler;
     //InetAddress serverAddr;
     Socket socket;
     PrintWriter sendWriter;
-    private String ip = "172.20.28.79";
+    BufferedReader receiveReader;
+    private String ip = "172.30.1.88";
+//    private String ip = "192.168.35.87";
     private int port = 8888;
 
     TextView textView;
@@ -44,6 +41,7 @@ private Handler mHandler;
         super.onStop();
         try {
             sendWriter.close();
+            receiveReader.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,15 +51,15 @@ private Handler mHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_chat);
         mHandler = new Handler();
         textView = (TextView) findViewById(R.id.textView);
         chatView = (TextView) findViewById(R.id.chatView);
         message = (EditText) findViewById(R.id.message);
-        //Intent intent = getIntent();
-        UserID = "클라이언트2"; // 유저 구분 이름
-        textView.setText("chatting App"); //
         chatbutton = (Button) findViewById(R.id.chatbutton);
+        //Intent intent = getIntent();
+//        UserID = "클라이언트2"; // 유저 구분 이름
+        textView.setText("chatting App"); //
 
         new Thread() {
             public void run() {
@@ -69,13 +67,43 @@ private Handler mHandler;
                     //InetAddress serverAddr = InetAddress.getByName(ip);
                     socket = new Socket(ip, port);
                     sendWriter = new PrintWriter(socket.getOutputStream());
-                    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    while(true){
-                        read = input.readLine();
+                    receiveReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                        System.out.println("TTTTTTTT"+read);
-                        if(read!=null){
-                            mHandler.post(new msgUpdate(read));
+                    UserID = receiveReader.readLine();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 받아온 ID를 텍스트뷰에 표시
+                            textView.setText("Your ID: " + UserID);
+                        }
+                    });
+
+                    while (true) {
+                        String read = receiveReader.readLine();
+
+                        System.out.println("TTTTTTTT" + read);
+                        if (read != null) {
+//                            mHandler.post(new msgUpdate(read));
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 메시지를 표시하는 TextView
+                                    TextView chatView = findViewById(R.id.chatView);
+
+                                    chatView.append(read + '\n');
+                                    // ID와 메시지 분리
+//                                    String[] parts = read.split(">");
+//                                    if (parts.length == 2) {
+//                                        String userID = parts[0];
+//                                        String message = parts[1];
+//
+//                                        // ID와 메시지를 화면에 표시
+//                                        chatView.append(userID + ": " + message + "\n");
+//                                    }
+
+                                }
+                            });
                         }
                     }
                 } catch (IOException e) {
@@ -94,9 +122,20 @@ private Handler mHandler;
                     public void run() {
                         super.run();
                         try {
-                            sendWriter.println(UserID +">"+ sendmsg);
-                            sendWriter.flush();
-                            message.setText("");
+                            if (sendWriter != null) {
+                                sendWriter.println(UserID + ">" + sendmsg);
+                                sendWriter.flush();
+                                message.setText("");
+                            } else {
+                                // sendWriter가 null이면 어떤 처리를 할지 결정
+                                // 예: 다시 소켓 연결 시도
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ChatActivity.this, "서버에 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
