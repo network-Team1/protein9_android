@@ -53,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         chatView = (TextView) findViewById(R.id.chat_textview_tv);
         message = (EditText) findViewById(R.id.chat_message_et);
         chatbutton = (Button) findViewById(R.id.chat_chatting_btn);
-//        textView.setText("chatting App"); // pt 선생님
+        textView.setText("chatting App"); // pt 선생님
 
         new Thread() {
             public void run() {
@@ -85,7 +85,7 @@ public class ChatActivity extends AppCompatActivity {
                                     // 메시지를 표시하는 TextView
                                     TextView chatView = findViewById(R.id.chat_textview_tv);
 
-                                    chatView.append("*** [ " + read + "님이 접속하셨습니다 ] ***\n");
+                                    chatView.append(read + '\n');
 
                                 }
                             });
@@ -108,7 +108,7 @@ public class ChatActivity extends AppCompatActivity {
                         super.run();
                         try {
                             if (sendWriter != null) {
-                                sendWriter.println(UserID + " : " + sendmsg);
+                                sendWriter.println(UserID + ": " + sendmsg);
                                 sendWriter.flush();
                                 message.setText("");
                             } else {
