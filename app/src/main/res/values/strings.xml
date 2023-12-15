@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">protein9_final</string>
+
+    <string-array name="song_list">
+        <item>음악의 신 - Seventeen</item>
+        <item>Drama - aespa</item>
+        <item>GODS - League of Lengends 및 Newjeans</item>
+        <item>Stadning Next to You - 정국</item>
+        <item>Chill Kill - Red Velvet</item>
+    </string-array>
 </resources>

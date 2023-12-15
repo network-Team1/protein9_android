@@ -22,11 +22,12 @@ public class ChatActivity extends AppCompatActivity {
     Socket socket;
     PrintWriter sendWriter;
     BufferedReader receiveReader;
-    private String ip = "172.30.1.88";
+    private String ip = "172.30.1.13";
     private int port = 8888;
 
     TextView textView;
     String UserID;
+    String clientID;
     Button chatbutton;
     TextView chatView;
     EditText message;
@@ -53,17 +54,77 @@ public class ChatActivity extends AppCompatActivity {
         chatView = (TextView) findViewById(R.id.chat_textview_tv);
         message = (EditText) findViewById(R.id.chat_message_et);
         chatbutton = (Button) findViewById(R.id.chat_chatting_btn);
-        textView.setText("chatting App"); // pt 선생님
+        textView.setText("채팅앱"); // pt 선생님
+
+        MyApplication myApp = (MyApplication) getApplication();
+        socket = myApp.getSocket();
+        sendWriter = myApp.getPrintWriter();
+
+        if (socket == null || sendWriter == null) {
+            // 서버 연결이 이루어지지 않은 경우
+            myApp.connectToServer();
+        } else {
+            // 이미 서버 연결이 된 경우
+            new Thread() {
+                public void run() {
+                    try {
+//                    socket = new Socket(ip, port);
+//                    sendWriter = new PrintWriter(socket.getOutputStream());
+                        receiveReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+//                    UserID = receiveReader.readLine();
+                        clientID = receiveReader.readLine();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 받아온 ID를 텍스트뷰에 표시
+                                textView.setText("채팅방");
+                            }
+                        });
+
+                        while (true) {
+                            read = receiveReader.readLine();
+
+                            System.out.println("TTTTTTTT" + read);
+                            if (read != null) {
+//                            mHandler.post(new msgUpdate(read));
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 메시지를 표시하는 TextView
+                                        TextView chatView = findViewById(R.id.chat_textview_tv);
+
+                                        chatView.append(read + '\n');
+
+                                    }
+                                });
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        }
+
+//        private void connectToServer() {
+//            new Thread() {
+//                public void run() {
+//
+//                }
+//            }.start();
+//        }
 
         new Thread() {
             public void run() {
                 try {
-                    //InetAddress serverAddr = InetAddress.getByName(ip);
-                    socket = new Socket(ip, port);
-                    sendWriter = new PrintWriter(socket.getOutputStream());
+//                    socket = new Socket(ip, port);
+//                    sendWriter = new PrintWriter(socket.getOutputStream());
                     receiveReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                    UserID = receiveReader.readLine();
+//                    UserID = receiveReader.readLine();
+                    clientID = receiveReader.readLine();
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -108,7 +169,7 @@ public class ChatActivity extends AppCompatActivity {
                         super.run();
                         try {
                             if (sendWriter != null) {
-                                sendWriter.println(UserID + ": " + sendmsg);
+                                sendWriter.println(clientID + ": " + sendmsg);
                                 sendWriter.flush();
                                 message.setText("");
                             } else {
