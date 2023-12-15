@@ -7,8 +7,8 @@ import smwu.network.team1.protein9_final.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var m_intent: Intent
+    lateinit var binding: ActivityMainBinding
+    lateinit var m_intent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

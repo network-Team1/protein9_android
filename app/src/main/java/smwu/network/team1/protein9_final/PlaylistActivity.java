@@ -2,11 +2,9 @@ package smwu.network.team1.protein9_final;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,8 +32,15 @@ public class PlaylistActivity extends AppCompatActivity {
         buttonGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlaylistActivity.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(PlaylistActivity.this, MainActivity.class);
+//                startActivity(intent);
+                EditText musicNameEditText = findViewById(R.id.music_name);
+                EditText musicArtistEditText = findViewById(R.id.music_artist);
+                String musicName = musicNameEditText.getText().toString();
+                String musicArtist = musicArtistEditText.getText().toString();
+
+                // 서버로 데이터를 전송하는 AsyncTask 실행
+                new SendDataToServerTask().execute(musicName, musicArtist);
             }
         });
     }

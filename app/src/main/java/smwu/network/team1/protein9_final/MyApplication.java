@@ -10,7 +10,7 @@ public class MyApplication extends Application {
 
     private Socket socket;
     private PrintWriter sendWriter;
-    private String ip = "172.30.1.13";
+    private String ip = "172.30.1.88";
     private int port = 8888;
 
     @Override

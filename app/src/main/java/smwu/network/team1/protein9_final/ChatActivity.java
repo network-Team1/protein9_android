@@ -22,7 +22,7 @@ public class ChatActivity extends AppCompatActivity {
     Socket socket;
     PrintWriter sendWriter;
     BufferedReader receiveReader;
-    private String ip = "172.30.1.13";
+    private String ip = "172.30.1.88";
     private int port = 8888;
 
     TextView textView;
@@ -84,6 +84,10 @@ public class ChatActivity extends AppCompatActivity {
                             public void run() {
                                 // 받아온 ID를 텍스트뷰에 표시
                                 textView.setText("채팅방");
+
+                                // 메시지를 표시하는 TextView
+                                TextView chatView = findViewById(R.id.chat_textview_tv);
+                                chatView.append(read + '\n');
                             }
                         });
 
@@ -120,29 +124,35 @@ public class ChatActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), sendmsg, Toast.LENGTH_SHORT).show();
                 if (clientID != null && !clientID.isEmpty()) {
                     Toast.makeText(getApplicationContext(), clientID, Toast.LENGTH_SHORT).show();
-                }
-                new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        try {
-                            if (sendWriter != null) {
-                                sendWriter.println(clientID + ":" + sendmsg);
-                                sendWriter.flush();
-                                message.setText("");
-                            } else {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(ChatActivity.this, "서버에 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                    // 채팅 메시지 프로토콜 생성
+                    String chatMessage = "CHAT:" + clientID + ":" + sendmsg;
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            try {
+                                if (sendWriter != null) {
+                                    sendWriter.println(chatMessage);
+                                    sendWriter.flush();
+                                    message.setText("");
+                                } else {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(ChatActivity.this, "서버에 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    }
-                }.start();
+                    }.start();
+                } else {
+                    // 클라이언트 ID가 null이거나 비어있다면 이 부분이 실행됩니다.
+                    Toast.makeText(getApplicationContext(), "Invalid client ID", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

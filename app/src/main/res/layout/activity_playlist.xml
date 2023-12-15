@@ -112,7 +112,7 @@
             android:textSize="20dp"
             android:textStyle="bold" />
 
-        <TextView
+        <EditText
             android:id="@+id/music_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
             android:background="@drawable/music_back1"
             android:hint="\t\t노래 제목 (Song Title)" />
 
-        <TextView
+        <EditText
             android:id="@+id/music_artist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
