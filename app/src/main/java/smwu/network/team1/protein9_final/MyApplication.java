@@ -26,6 +26,8 @@ public class MyApplication extends Application {
                 try {
                     socket = new Socket(ip, port);
                     sendWriter = new PrintWriter(socket.getOutputStream());
+
+//                    startServerConnection();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

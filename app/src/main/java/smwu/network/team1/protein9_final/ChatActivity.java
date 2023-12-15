@@ -38,8 +38,12 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         try {
-            sendWriter.close();
-            socket.close();
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            if (sendWriter != null) {
+                sendWriter.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,68 +112,22 @@ public class ChatActivity extends AppCompatActivity {
             }.start();
         }
 
-//        private void connectToServer() {
-//            new Thread() {
-//                public void run() {
-//
-//                }
-//            }.start();
-//        }
-
-        new Thread() {
-            public void run() {
-                try {
-//                    socket = new Socket(ip, port);
-//                    sendWriter = new PrintWriter(socket.getOutputStream());
-                    receiveReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-//                    UserID = receiveReader.readLine();
-                    clientID = receiveReader.readLine();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 받아온 ID를 텍스트뷰에 표시
-                            textView.setText("채팅방");
-                        }
-                    });
-
-                    while (true) {
-                        read = receiveReader.readLine();
-
-                        System.out.println("TTTTTTTT" + read);
-                        if (read != null) {
-//                            mHandler.post(new msgUpdate(read));
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // 메시지를 표시하는 TextView
-                                    TextView chatView = findViewById(R.id.chat_textview_tv);
-
-                                    chatView.append(read + '\n');
-
-                                }
-                            });
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
 
         chatbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendmsg = message.getText().toString();
-                Toast.makeText(getApplicationContext(), sendmsg, Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), sendmsg, Toast.LENGTH_SHORT).show();
+                if (clientID != null && !clientID.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), clientID, Toast.LENGTH_SHORT).show();
+                }
                 new Thread() {
                     @Override
                     public void run() {
                         super.run();
                         try {
                             if (sendWriter != null) {
-                                sendWriter.println(clientID + ": " + sendmsg);
+                                sendWriter.println(clientID + ":" + sendmsg);
                                 sendWriter.flush();
                                 message.setText("");
                             } else {
