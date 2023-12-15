@@ -27,6 +27,7 @@ public class ChatActivity extends AppCompatActivity {
 
     TextView textView;
     String UserID;
+    String clientID;
     Button chatbutton;
     TextView chatView;
     EditText message;
@@ -53,17 +54,36 @@ public class ChatActivity extends AppCompatActivity {
         chatView = (TextView) findViewById(R.id.chat_textview_tv);
         message = (EditText) findViewById(R.id.chat_message_et);
         chatbutton = (Button) findViewById(R.id.chat_chatting_btn);
-        textView.setText("chatting App"); // pt 선생님
+        textView.setText("채팅앱"); // pt 선생님
+
+        MyApplication myApp = (MyApplication) getApplication();
+        socket = myApp.getSocket();
+        sendWriter = myApp.getPrintWriter();
+
+        if (socket == null || sendWriter == null) {
+            // 서버 연결이 이루어지지 않은 경우
+            myApp.connectToServer();
+        } else {
+            // 이미 서버 연결이 된 경우
+        }
+
+//        private void connectToServer() {
+//            new Thread() {
+//                public void run() {
+//
+//                }
+//            }.start();
+//        }
 
         new Thread() {
             public void run() {
                 try {
-                    //InetAddress serverAddr = InetAddress.getByName(ip);
-                    socket = new Socket(ip, port);
-                    sendWriter = new PrintWriter(socket.getOutputStream());
+//                    socket = new Socket(ip, port);
+//                    sendWriter = new PrintWriter(socket.getOutputStream());
                     receiveReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                    UserID = receiveReader.readLine();
+//                    UserID = receiveReader.readLine();
+                    clientID = receiveReader.readLine();
 
                     runOnUiThread(new Runnable() {
                         @Override
