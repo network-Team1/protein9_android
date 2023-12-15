@@ -146,13 +146,14 @@
             android:layout_height="match_parent"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
+
             <ImageView
                 android:id="@+id/main_listen_album"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:background="@color/banana"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
             <ImageView
                 android:id="@+id/main_listen_playbar_iv"
                 android:layout_width="150dp"

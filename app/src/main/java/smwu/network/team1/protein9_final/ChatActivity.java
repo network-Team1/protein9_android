@@ -22,7 +22,7 @@ public class ChatActivity extends AppCompatActivity {
     Socket socket;
     PrintWriter sendWriter;
     BufferedReader receiveReader;
-    private String ip = "172.30.1.88";
+    private String ip = "172.30.1.13";
     private int port = 8888;
 
     TextView textView;
