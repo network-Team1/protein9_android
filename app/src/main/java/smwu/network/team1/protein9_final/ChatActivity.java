@@ -65,6 +65,47 @@ public class ChatActivity extends AppCompatActivity {
             myApp.connectToServer();
         } else {
             // 이미 서버 연결이 된 경우
+            new Thread() {
+                public void run() {
+                    try {
+//                    socket = new Socket(ip, port);
+//                    sendWriter = new PrintWriter(socket.getOutputStream());
+                        receiveReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+//                    UserID = receiveReader.readLine();
+                        clientID = receiveReader.readLine();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 받아온 ID를 텍스트뷰에 표시
+                                textView.setText("채팅방");
+                            }
+                        });
+
+                        while (true) {
+                            read = receiveReader.readLine();
+
+                            System.out.println("TTTTTTTT" + read);
+                            if (read != null) {
+//                            mHandler.post(new msgUpdate(read));
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 메시지를 표시하는 TextView
+                                        TextView chatView = findViewById(R.id.chat_textview_tv);
+
+                                        chatView.append(read + '\n');
+
+                                    }
+                                });
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
         }
 
 //        private void connectToServer() {
@@ -128,7 +169,7 @@ public class ChatActivity extends AppCompatActivity {
                         super.run();
                         try {
                             if (sendWriter != null) {
-                                sendWriter.println(UserID + ": " + sendmsg);
+                                sendWriter.println(clientID + ": " + sendmsg);
                                 sendWriter.flush();
                                 message.setText("");
                             } else {
