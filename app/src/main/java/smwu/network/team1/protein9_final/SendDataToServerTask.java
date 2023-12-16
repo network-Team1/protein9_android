@@ -11,19 +11,21 @@ import java.net.Socket;
 public class SendDataToServerTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
-        if (params.length != 2) {
-            // 적절한 파라미터가 전달되지 않았을 경우 예외 처리
-            return "ADD_TO_PLAYLIST_FAILURE";
+        if (params.length == 0) {
+            return null;  // 매개변수가 제공되지 않음
         }
 
-        String musicName = params[0];
-        String musicArtist = params[1];
+        String messageType = params[0];
 
-        // 노래 신청 메시지 프로토콜 생성
-        String songRequestMsg = "SONG_REQUEST:" + musicName + "," + musicArtist;
+        if ("SONG_REQUEST".equals(messageType) && params.length == 3) {
+            // 서버에 노래 요청
+            return sendDataToServer("SONG_REQUEST:" + params[1] + "," + params[2]);
+        } else if ("REQUEST_PLAYLIST".equals(messageType)) {
+            // 서버에 재생 목록 요청
+            return sendDataToServer("REQUEST_PLAYLIST");
+        }
 
-        // 서버로 데이터 전송 및 응답 받아오기
-        return sendDataToServer(songRequestMsg);
+        return null;  // 잘못된 매개변수
     }
 
     private String sendDataToServer(String message) {

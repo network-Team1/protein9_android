@@ -40,8 +40,10 @@ public class PlaylistActivity extends AppCompatActivity {
                 String musicArtist = musicArtistEditText.getText().toString();
 
                 // 서버로 데이터를 전송하는 AsyncTask 실행
-                new SendDataToServerTask().execute(musicName, musicArtist);
+                new SendDataToServerTask().execute("SONG_REQUEST", musicName, musicArtist);
             }
         });
+
+        new SendDataToServerTask().execute("REQUEST_PLAYLIST");
     }
 }
